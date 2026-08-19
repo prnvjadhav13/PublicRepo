@@ -4,6 +4,13 @@ CMakeFiles
 CMakeScripts
 Testing
 Makefile
+!TcpEpollRequestBench/Makefile
+TcpEpollRequestBench/build/
+TcpEpollRequestBench/tcp_server_epoll
+TcpEpollRequestBench/tcp_client
+TcpEpollRequestBench/*.bin
+TcpEpollRequestBench/*.bin.tmp.*
+TcpEpollRequestBench/client_request_keys.txt
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
