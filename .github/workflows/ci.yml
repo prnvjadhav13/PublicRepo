@@ -1,0 +1,58 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build production and sanitizer variants
+        run: |
+          make -C TcpEpollRequestBench production
+          make -C TcpEpollRequestBench sanitizer
+
+      - name: Run localhost smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          project_dir=TcpEpollRequestBench
+          temp_dir="$(mktemp -d)"
+          server_pid=""
+
+          cleanup() {
+            if [[ -n "$server_pid" ]] && kill -0 "$server_pid" 2>/dev/null; then
+              kill -TERM "$server_pid"
+              wait "$server_pid" || true
+            fi
+            rm -rf "$temp_dir"
+          }
+          trap cleanup EXIT
+
+          "$project_dir/build/production/tcp_server_epoll"             --mapping-file "$temp_dir/mapping.bin"             --mapping-entries 32             --regen-mapping             --export-keys 32             --keys-output "$temp_dir/keys.txt"
+
+          "$project_dir/build/production/tcp_server_epoll"             --listen 18080             --event-loops 1             --max-connections-per-loop 100             --idle-timeout-seconds 15             --mapping-file "$temp_dir/mapping.bin"             --mapping-loader mmap-view >"$temp_dir/server.log" 2>&1 &
+          server_pid=$!
+
+          for _ in {1..50}; do
+            if grep -q "Listening on port" "$temp_dir/server.log"; then
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              cat "$temp_dir/server.log"
+              exit 1
+            fi
+            sleep 0.1
+          done
+          grep -q "Listening on port" "$temp_dir/server.log"
+
+          timeout 20s "$project_dir/build/production/tcp_client" 127.0.0.1 18080             --keys-file "$temp_dir/keys.txt"             --request-count 32             --max-concurrency 4
