@@ -18,8 +18,8 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
-# These projects are maintained as independent Git repositories.
-/TcpEpollRequestBench/
+# TLS is maintained as an independent Git repository. The TCP directory remains
+# tracked here as a compatibility snapshot for previously shared GitHub links.
 /TlsEpollRequestBench/
 
 # CLion
