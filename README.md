@@ -2,9 +2,9 @@
 
 A collection of focused C++ projects demonstrating practical systems-programming design, testing, and performance measurement on Linux.
 
-## Featured project
+## Projects
 
-### [TcpEpollRequestBench](TcpEpollRequestBench/)
+### [TcpEpollRequestBench](https://github.com/prnvjadhav13/TcpEpollRequestBench)
 
 A C++23/Linux TCP request-response benchmark built around `epoll` and nonblocking I/O.
 
@@ -17,12 +17,18 @@ Highlights:
 - Concurrent client load generation with throughput and failure reporting
 - Mapping data loaders based on `ifstream`, `mmap`, and zero-copy `mmap-view`
 
-See the project README for build instructions, protocol details, security boundaries, and benchmark methodology.
+See the standalone project repository for build instructions, protocol details,
+security boundaries, and benchmark methodology. The local
+[`TcpEpollRequestBench/`](TcpEpollRequestBench/) directory is retained only as
+a relocation notice for previously shared links.
 
-## Verification
+### [TlsEpollRequestBench](https://github.com/prnvjadhav13/TlsEpollRequestBench)
 
-GitHub Actions builds production and sanitizer variants, then runs a localhost client/server smoke test for the featured project.
+A C++23/Linux TCP and TLS request-response benchmark for learning and measuring
+TLS 1.2 and TLS 1.3 over a reusable `epoll` event-loop architecture, including
+mutual TLS support and hardened transport policy.
 
 ## Notes
 
-This is an educational and benchmarking project. It is not intended to be deployed as an unauthenticated Internet-facing service.
+These are educational and benchmarking projects. Consult each standalone
+repository's documentation and security guidance before production deployment.

@@ -18,9 +18,8 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
-# TLS is maintained as an independent Git repository. The TCP directory remains
-# tracked here as a compatibility snapshot for previously shared GitHub links.
-/TlsEpollRequestBench/
+# TcpEpollRequestBench/ contains only a tracked relocation notice. The active
+# TCP and TLS projects are maintained as sibling repositories of PublicRepo.
 
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
